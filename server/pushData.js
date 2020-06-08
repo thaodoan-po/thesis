@@ -1,6 +1,7 @@
 const firebase = require('firebase-admin');
 var serviceAccount = require("./service-account-file.json");
-const SSH = require('simple-ssh');
+const { exec } = require('child_process');
+
 firebase.initializeApp({
     credential: firebase.credential.cert(serviceAccount),
     databaseURL: "https://thaodoan-thesis.firebaseio.com"
@@ -75,18 +76,21 @@ function pushData(data) {
       cpus: num
     })
   }
+    //Kill process
+  let firstTime = true;
+  pushData.prototype.killProc = function(){
+    didRef.child("task/cmd").on('value', snapshot => {
+      if(firstTime) {
+        firstTime = false;
+        return;
+      }
+      // let cmd = snapshot.val();
+      // console.log(cmd);
+      var script = exec(snapshot.val());
+    })
+  }
   pushData.prototype.addNetwork = function(){
-    var ssh = new SSH({
-      host: '192.168.199.129',
-      user: 'administrator',
-      pass: '12345678'
-    });
-    ssh.exec('ifstat -tSTz 10', {
-      out: function(stdout, stderr){
-        if(stderr)
-        {
-            console.log(stderr);
-        }
+    exec('ifstat -tSTz 10', (eror, stdout, stderr) => {
         console.log(stdout);
         var reg = /(\d+:\d+:\d+)\s+\d+.?\d+\s+\d+.?\d+\s+(\d+.?\d+)\s+(\d+.?\d+)$/gim;
         var result = reg.exec(stdout);
