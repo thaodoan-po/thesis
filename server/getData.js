@@ -1,4 +1,5 @@
 const push = require('./pushData');
+const { exec } = require('child_process');
 function getData(data) {
   this.data = data;
   var fData = new push(data);
@@ -86,6 +87,9 @@ function getData(data) {
   }
   getData.prototype.getNetwork = function(){
     fData.addNetwork();
+  }
+  getData.prototype.killProcess = function(){
+    fData.killProc();
   }
 }
 module.exports = getData;
