@@ -1,29 +1,28 @@
 const push = require('./pushData');
-const { exec } = require('child_process');
 function getData(data) {
-  this.data = data;
-  var fData = new push(data);
+   this.data = data;
+   var fData = new push(data);
   //Get OS
-  getData.prototype.getOS = function(){
-    var reg = /OS\sdetails:\s(\w.*)/gim;
-    var OS = reg.exec(data);
-    fData.addOS(OS[1]);
-    return OS[1];
-  }
+//   getData.prototype.getOS = function(){
+//     var reg = /OS\sdetails:\s(\w.*)/gim;
+//     var OS = reg.exec(data);
+//     //fData.addOS(OS[1]);
+//     return OS[1];
+//   }
 
   //Get port, services 
   getData.prototype.getPort = function(){
     var tempPort;
     //Pattern get ports, services, OS
-    var reg = /(\d+)\/(\w{2}p)\s+open(?:\|filtered)*\s+(\w+)/gim;
+    var reg = /(\w+)d.\w?\s+\d+\s+\w+.?\w+\s+\w+\s+IPv4\s+\d+\s+\w+\s+(TCP|UDP)\s+(\d+.\d+.\d+.\d+):(\d+)/gim;
     var ports = [];
     while(tempPort = reg.exec(data)) {
     //List group pattern
       ports.push([
-        tempPort[0],tempPort[1], tempPort[2], tempPort[3]
+        tempPort[0],tempPort[1], tempPort[2], tempPort[3], tempPort[4]
       ]);
     //Push to firebase  
-      fData.addPort(tempPort[1], tempPort[2], tempPort[3]);
+      fData.addPort(tempPort[4], tempPort[2], tempPort[1]);
     }
     return ports;
   }
@@ -64,30 +63,30 @@ function getData(data) {
   
   //Get top process sort by %mem
   getData.prototype.getProcess = function(){
-    var reg = /^\s(\d+)\s+([a-z]+|[a-z]+-[a-z]+|[a-z]+\d)\s+(\d+.\d+)$/gim;
+    var reg = /^\s+(\d+)\s(\w+-\w+|\w+)\s+(\d+.{2})\s+(\d+.{2})$/gim;
     var temp;
-    var process = [];
+    var process = {};
     while(temp = reg.exec(data)){
-      process.push([
-        temp[1], temp[2], temp[3]
-      ]);
-      fData.addProcess(temp[1], temp[2], temp[3])
+      process[temp[1]] = {
+        cmd : temp[2],
+        mem : temp[3]
+      }
+      // process.push([
+      //   temp[1], temp[2], temp[3]
+      // ]);
     }
+    fData.addProcess(process)
     return process;
   }
 
   //Get CPU Utilization
   getData.prototype.getCpu = function(){
-    var reg = /(\d+|\d+.\d+)\s(id)/gim;
-    var temp = reg.exec(data);
-    var cpu = 100 - temp[1];
-    cpu = cpu.toFixed(2);
-    fData.addCpu(cpu);
-    return cpu;
+    fData.addCpu();
   }
   getData.prototype.getNetwork = function(){
     fData.addNetwork();
   }
+
   getData.prototype.killProcess = function(){
     fData.killProc();
   }
