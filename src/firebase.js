@@ -11,6 +11,7 @@ const config = {
 }
 const app = firebase.initializeApp(config);
 const db = app.database();
+const store = app.firestore();
 //let ref = db.ref('monitor/users/001/domain/001/disk');
 // var array = [];
 // ref.on('value', snapshot => {
@@ -28,10 +29,4 @@ const db = app.database();
 //         console.log(snapshot.val());
 //         console.log('DATA RETRIEVED');
 //     });
-        let ref = db.ref('monitor/users/001/domain/001/topProcess').orderByChild('mem');
-        ref.on('value', snapshot => {
-            var state = snapshot.val();
-            console.log(state);
-        });
-export default db;
-    
+export {db, store};
