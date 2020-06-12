@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
-import db from '../firebase';
+import {db} from '../firebase';
 class Process extends Component {
   constructor(props){
     super(props);
     this.state = {
-
     }
   }
   getData = () => {
-    let ref = db.ref('monitor/users/001/domain/001/topProcess').orderByChild('mem');
-        ref.on('value', snapshot => {
-            const state = snapshot.val();
-            //console.log(state);
-            this.setState(state);
-        });
+    let ref = db.ref('monitor/users/001/domain/001/topProcess');
+    ref.on('value', snapshot => {
+      this.setState(snapshot.val());
+    });
+  }
+  killProcess = (pid) => {
+    if(!window.confirm('Do you really want to kill process?'))
+      return;
+    let ref = db.ref('monitor/users/001/domain/001/task');
+      ref.set({
+        cmd: 'kill -9 ' + pid
+      });
   }
   componentDidMount(){
     this.getData();
@@ -24,19 +29,36 @@ class Process extends Component {
         return (
             <div className="card shadow mb-4">
               <div className="card-header py-3">
-                <h6 className="m-0 font-weight-bold text-primary text-left">Top Process Running</h6>
+                <h6 className="m-0 font-weight-bold text-primary text-left">Process Running</h6>
               </div>
               <div className="card-body">
-                {
-                  temp.map(i => 
-                    <div>
-                      <h4 className="small font-weight-bold"> <span className="float-left"> PID {i} </span> {this.state[i].cmd} <span className="float-right"> {this.state[i].mem} % Memory</span> </h4>
-                      <div className="progress mb-4">
-                        <div className="progress-bar bg-warning" role="progressbar" style={{width: + this.state[i].mem}} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}></div>
-                      </div>
-                   </div>
-                  )
-                }
+                <div className="table-responsive">
+                  <table className="table table-striped" id="dataTable" width="100%" cellSpacing={0}>
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">PID</th>
+                        <th scope="col">Command</th>
+                        <th scope="col">%Mem</th>
+                        <th scope="col"></th>
+                      </tr>
+                      </thead>
+                    <tfoot></tfoot>
+                    <tbody>
+                      {
+                        temp.map((i, num) =>
+                          <tr>
+                            <td>{num+1}</td>
+                            <td>{i}</td>
+                            <td>{this.state[i].cmd}</td>
+                            <td>{this.state[i].mem}</td>
+                            <td><button value={i} type="button" class="btn btn-danger" type="submit" onClick={() =>this.killProcess(i)}>Kill</button></td>
+                          </tr>
+                        )
+                      }
+                    </tbody>
+                  </table>
+                </div>
               </div>
           </div>
         );

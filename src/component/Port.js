@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import db from '../firebase';
+import {db} from '../firebase';
 
 class Port extends Component {
     constructor(props){
@@ -20,8 +20,6 @@ class Port extends Component {
     render() {
         var temp = Object.keys(this.state);
         var k = temp.map(key => this.state[key]);
-        console.log(temp);
-        console.log(k);
         return (
             <div className="card shadow mb-4">
               <div className="card-header py-3">
