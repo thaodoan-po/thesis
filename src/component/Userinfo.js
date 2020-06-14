@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import {app} from '../firebase';
 
 export default class Userinfo extends Component {
+    logout = () => {
+        app.auth().signOut();
+    }
     render() {
         return (
             <div className="nav-item dropdown no-arrow">
@@ -11,19 +15,10 @@ export default class Userinfo extends Component {
                     </a>
                     {/* Dropdown - User Information */}
                     <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                        {/* <a className="dropdown-item" href="#">
-                            <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400" />
-                            Profile
-                        </a> */}
-                        <a className="dropdown-item" href="#">
-                            <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400" />
-                            Settings
-                        </a>
-                        <div className="dropdown-divider" />
-                        <a className="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                        <button className="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" onClick={this.logout}>
                             <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />
                             Logout
-                        </a>
+                        </button>
                     </div>
                 
             </div>
