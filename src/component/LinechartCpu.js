@@ -65,10 +65,10 @@ export default class LinechartCpu extends Component {
                                             type: "realtime",
                                             realtime: {
                                                 // duration: 20000,
-                                                refresh: 5000,
+                                                refresh: 10000,
                                                 delay: 2000,
                                                 onRefresh: function (chart) {
-                                                    let ref = store.ref('001/domain/001').doc('cpu');
+                                                    let ref = store.collection('users/001/001').doc('cpu');
                                                     ref.get().then((snapshot) => {
                                                         chart.config.data.datasets.push({
                                                             x: Date.now(),
