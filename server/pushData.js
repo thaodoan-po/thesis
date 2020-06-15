@@ -74,17 +74,19 @@ function pushData(data) {
   //Add Cpu Utilization
   pushData.prototype.addCpu = function () {
     var { exec } = require('child_process');
-    exec('top -bn1 | grep "Cpu(s)"', (err, stdout, stderr) => {
+    exec('top -bn1 | grep "Cpu(s)" && top -bn1 | grep "top -"', (err, stdout, stderr) => {
       console.log(stderr);
       var reg = /(\d+|\d+.\d+)\s(id)/gim;
       var temp = reg.exec(stdout);
+      var reg2 = /\d+:\d+:\d+/gim;
+      var time = reg2.exec(stdout);
       var cpu = 100 - temp[1];
       cpu = cpu.toFixed(2);
       if (cpu > 70) {
         followCpu();
       }
-      console.log(cpu)
       sref.doc('cpu').set({
+        time: time[0],
         cpus: cpu
       })
     })
