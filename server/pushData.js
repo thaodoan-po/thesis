@@ -11,7 +11,7 @@ firebase.initializeApp({
 var db = firebase.database();
 var store = firebase.firestore();
 //store databse path
-let sref = store.collection('001/domain/001');
+let sref = store.collection('users/001/001');
 //firebase realtime database path
 var ref = db.ref("monitor/users");
 
@@ -83,7 +83,13 @@ function pushData(data) {
       var cpu = 100 - temp[1];
       cpu = cpu.toFixed(2);
       if (cpu > 70) {
-        followCpu();
+        if(followCpu() == 1)
+        {
+          let ref = store.collection('warning').doc('001')
+          .collection('highCpu').doc('time').add({
+            timeStart: time[0]
+          })
+        }
       }
       sref.doc('cpu').set({
         time: time[0],
