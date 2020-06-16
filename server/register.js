@@ -22,7 +22,6 @@ console.log('Welcome to Semi application \nYou must have an account to use our s
 var email = readline.question("Your email: ");
 var password = readline.question('Your password: ', { hideEchoBack: true });
 var password = readline.question('Password comfirm ', { hideEchoBack: true });
-console.log('Register successed');
 firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
     // Handle Errors here.
     var errorCode = error.code;
@@ -34,10 +33,3 @@ var reg = /(\w+)@\w+.\w+/gim;
 var temp = reg.exec(email);
 const id = temp[1];
 module.exports.id = id;
-// var fs = require('fs')
-// fs.writeFile('./id.tetx', id, function (err, data) {
-//     if (err) {
-//         return console.log(err);
-//     }
-//     console.log(data);
-// });

@@ -5,13 +5,13 @@ module.exports = function getProcessRunning(ref) {
         var reg = /^\s+(\d+)\s(\w+-\w+|\w+)\s+(\d+.{2})\s+(\d+.{2})$/gim;
         var temp;
         var process = {};
-        while (temp = reg.exec(data)) {
+        while (temp = reg.exec(stdout)) {
             process[temp[1]] = {
                 cmd: temp[2],
                 mem: temp[3],
                 cpu: temp[4]
             }
         }
-        ref.set(processList)
+        ref.set(process)
     })
 }
