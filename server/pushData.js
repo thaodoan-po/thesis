@@ -1,25 +1,20 @@
-const firebase = require('firebase-admin');
-var serviceAccount = require("./service-account-file.json");
 const { exec } = require('child_process');
-var followCpu = require('./followCpu')
-
-firebase.initializeApp({
-  credential: firebase.credential.cert(serviceAccount),
-  databaseURL: "https://thaodoan-thesis.firebaseio.com"
-});
-
+var followCpu = require('./followCpu');
+var firebase = require('./firebase');
+var id = require('./register');
+console.log(id);
 var db = firebase.database();
 var store = firebase.firestore();
 //store databse path
 let sref = store.collection('users/001/001');
 //firebase realtime database path
 var ref = db.ref("monitor/users");
+var uidRef = ref.child("001");
 
 ref.once("value", function (snapshot) {
   console.log(snapshot.val());
 });
 //define path
-var uidRef = ref.child("001");
 var domainRef = uidRef.child("domain");
 var didRef = domainRef.child("001");
 var procRef = didRef.child("topProcess");
