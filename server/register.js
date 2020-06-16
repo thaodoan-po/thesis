@@ -33,7 +33,7 @@ firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (
 var reg = /(\w+)@\w+.\w+/gim;
 var temp = reg.exec(email);
 const id = temp[1];
-module.exports = id;
+module.exports.id = id;
 // var fs = require('fs')
 // fs.writeFile('./id.tetx', id, function (err, data) {
 //     if (err) {

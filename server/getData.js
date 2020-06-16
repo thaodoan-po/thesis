@@ -2,14 +2,6 @@ const push = require('./pushData');
 function getData(data) {
    this.data = data;
    var fData = new push(data);
-  //Get OS
-//   getData.prototype.getOS = function(){
-//     var reg = /OS\sdetails:\s(\w.*)/gim;
-//     var OS = reg.exec(data);
-//     //fData.addOS(OS[1]);
-//     return OS[1];
-//   }
-
   //Get port, services 
   getData.prototype.getPort = function(){
     var tempPort;
@@ -69,11 +61,9 @@ function getData(data) {
     while(temp = reg.exec(data)){
       process[temp[1]] = {
         cmd : temp[2],
-        mem : temp[3]
+        mem : temp[3],
+        cpu : temp[4]
       }
-      // process.push([
-      //   temp[1], temp[2], temp[3]
-      // ]);
     }
     fData.addProcess(process)
     return process;

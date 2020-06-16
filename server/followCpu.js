@@ -1,6 +1,6 @@
 const { exec } = require('child_process');
 var schedule = require('node-schedule');
-function followCPU(){
+module.exports = function followCPU(){
     var data = [];
     var startTime = new Date().getTime()/1000;
     var waitTime = 30000;
@@ -23,7 +23,7 @@ function followCPU(){
     });
     if(data.length - count == 0)
     {
-        //Push email notification
-    }    
+        return 1;   
+    }
+    else return 0;    
 }
-module.exports = followCPU;

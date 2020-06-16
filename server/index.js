@@ -1,30 +1,21 @@
-var data = require('./getData');
-var { exec } = require('child_process');
-let upDate = () => {
-    exec('sudo lsof -i -P -n | grep LISTEN && uptime && free -m && ps -eo pid,comm,%mem,%cpu --sort=-%mem | head -n 6 && df -h /dev/sda2 && ps aux | wc -l', (e, stdout, stderr) => {
-        if (e instanceof Error) {
-            console.error(e);
-            throw e;
-        }
-        //console.log(stdout);
-        var p = new data(stdout);
-        //var cpu = p.getCpu();
-        //var os = p.getOS();
-        var port = p.getPort();
-        var load = p.getLoadAvg();
-        var mem = p.getMem();
-        var disk = p.getDisk();
-        var total = p.getTotalProcess();
-        var process = p.getProcess();
-        var kill = p.killProcess();
-        //console.log(port[0][4], port[0][2], port[0][1]);
-    });
-};
-setInterval(upDate, 30000);
-//sudo lsof -i -P -n | grep LISTEN && uptime && free -m && ps -eo pid,comm,%mem,%cpu --sort=-%mem && df -h /dev/sda2 && top -bn1 | grep "Cpu(s)" && ps aux | wc -l
-let network = () => {
+var firebase = require('./firebase');
+var db = firebase.database();
+var store = firebase.firestore();
 
-let p = new data();
-p.getNetwork();
-}
-setInterval(network, 1000);
+//Function get data
+var getNetwork = require('./getNetwork');
+var getPort = require('./getPort');
+var getDiskUsage = require('./getDisk');
+const email = require('./register');
+//get email to set uid
+var uid = email.id;
+console.log(tmp);
+//store databse path
+let sref = store.collection('users/' + uid + '/001');
+let ref = db.ref('monitor/users/'+ uid +'/domain/001');
+let portRef = ref.child('port');
+let procRef = ref.child('processRunning')
+//Execute 
+//getNetwork(sref);
+// getPort(portRef);
+getDiskUsage(ref);
