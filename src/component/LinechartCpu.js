@@ -68,9 +68,10 @@ export default class LinechartCpu extends Component {
                                                 refresh: 10000,
                                                 delay: 2000,
                                                 onRefresh: function (chart) {
-                                                    let ref = store.collection('users/oanthao150399999/001').doc('cpu');
+                                                    let ref = store.collection('users/doanthao150399999/001').doc('cpu');
                                                     ref.get().then((snapshot) => {
-                                                        chart.config.data.datasets.push({
+                                                        const datasets = chart.config.data.datasets
+                                                        datasets[0].data.push({
                                                             x: Date.now(),
                                                             y: snapshot.data().cpus
                                                         })
