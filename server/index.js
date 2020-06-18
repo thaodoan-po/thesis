@@ -22,12 +22,12 @@ let ref = db.ref('monitor/users/'+ uid +'/domain/001');
 let portRef = ref.child('port');
 let procRef = ref.child('procRunning')
 //Execute 
-getNetwork(sref);
-getCpu(sref);
-getPort(portRef);
-getDiskUsage(ref);
-getLoadAvg(ref);
-getProcessRunning(procRef);
-getDisk(ref);
-getMem(ref);
+// getNetwork(sref);
+// getCpu(sref);
+// getPort(portRef);
+// getDiskUsage(ref);
+// getLoadAvg(ref);
+// getProcessRunning(procRef);
+// getDisk(ref);
+// getMem(ref);
 getTotalProcess(ref);
