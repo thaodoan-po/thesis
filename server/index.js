@@ -13,6 +13,7 @@ var getProcessRunning = require('./getProcessRunning');
 var getTotalProcess = require('./getTotalProcess');
 var getCpu = require('./getCpu');
 const register = require('./register');
+const getCpus = require('./getCpus');
 //get email to set uid
 var uid = register.id;
 console.log(uid);
@@ -22,12 +23,13 @@ let ref = db.ref('monitor/users/'+ uid +'/domain/001');
 let portRef = ref.child('port');
 let procRef = ref.child('procRunning')
 //Execute 
-// getNetwork(sref);
-// getCpu(sref);
-// getPort(portRef);
-// getDiskUsage(ref);
-// getLoadAvg(ref);
-// getProcessRunning(procRef);
-// getDisk(ref);
-// getMem(ref);
+getNetwork(sref);
+getCpu(sref);
+getPort(portRef);
+getDiskUsage(ref);
+getLoadAvg(ref);
+getProcessRunning(procRef);
+getDisk(ref);
+getCpus(ref);
+getMem(ref);
 getTotalProcess(ref);
