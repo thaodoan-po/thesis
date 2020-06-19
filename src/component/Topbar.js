@@ -11,7 +11,7 @@ export default class Topbar extends Component {
                 {/* <Search/> */}
                 {/* <img src='%PUBLIC%URL%/../logo.png' alt="logo" /> */}
                 <ul className="navbar-nav ml-auto" />
-                <Notification/>
+                {/* <Notification/> */}
                 <div className="topbar-divider d-none d-sm-block" />
                 <Userinfo/>
                </nav>

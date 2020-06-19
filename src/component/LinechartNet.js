@@ -76,7 +76,7 @@ export default class LinechartNet extends Component {
                         refresh: 10000,
                         delay: 1000,
                         onRefresh: function (chart) {
-                          let ref = store.collection('users/doanthao150399999/001/').doc('network');
+                          let ref = store.collection(`users/${this.props.user}/001/`).doc('network');
                           ref.get().then(snapshot => {
                             const datasets = chart.config.data.datasets
                             datasets[0].data.push({

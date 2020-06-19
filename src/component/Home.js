@@ -3,11 +3,12 @@ import Topbar from './Topbar';
 import Footer from './Footer';
 import Pageheading from './Pageheading';
 import Card from './Card';
-import Linechart from './Linechart';
 import Piechart from './Piechart';
 import Process from './Process';
 import {db} from '../firebase';
-import Port from './/Port';
+import Port from './Port';
+import LinechartCpu from './LinechartCpu';
+import LinechartNet from './LinechartNet';
 
 class Home extends Component {
   constructor(props){
@@ -20,10 +21,9 @@ class Home extends Component {
     };
   }
   getLoadAvg = () => {
-    let ref = db.ref('monitor/users/001/domain/001/loadAvg/onesec');
+    let ref = db.ref(`monitor/users/${this.props.user}/domain/001/loadAvg/onesec`);
     ref.on('value', snapshot => {
       const state = snapshot.val();
-      console.log(state);
       this.setState ({
         loadAvg: state + "s"
       });
@@ -31,10 +31,9 @@ class Home extends Component {
     console.log('DATA RETRIEVED');
   }
   getUsedMem = () => {
-    let ref = db.ref('monitor/users/001/domain/001/mem/used');
+    let ref = db.ref(`monitor/users/${this.props.user}/domain/001/mem/used`);
     ref.on('value', snapshot => {
       const state = snapshot.val();
-      console.log(state);
       this.setState ({
         memUsed: state + "%"
       });
@@ -42,10 +41,9 @@ class Home extends Component {
     console.log('DATA RETRIEVED');
   }
   getTotalProc = () => {
-    let ref = db.ref('/monitor/users/001/domain/001/totalProc/total');
+    let ref = db.ref(`/monitor/users/${this.props.user}/domain/001/totalProc/total`);
     ref.on('value', snapshot => {
       const state = snapshot.val();
-      console.log(state);
       this.setState ({
         total: state
       });
@@ -53,10 +51,9 @@ class Home extends Component {
     console.log('DATA RETRIEVED');
   }
   getCpu = () => {
-    let ref = db.ref('monitor/users/001/domain/001/cpu/cpus');
+    let ref = db.ref(`monitor/users/${this.props.user}/domain/001/cpu/cpus`);
     ref.on('value', snapshot => {
       const state = snapshot.val();
-      console.log(state);
       this.setState ({
         cpu: state + "%"
       });
@@ -89,19 +86,22 @@ class Home extends Component {
   
             {/* Chart area */}
             <div className="row">
-              <div className="col-xl-8 col-lg-7">
-                <Linechart title="Networking"></Linechart>
+            <div className="col-xl-4 col-lg-5">
+                {/* <LinechartNet user = {this.props.user}></LinechartNet> */}
+              </div>
+            <div className="col-xl-4 col-lg-5">
+                {/* <LinechartCpu user = {this.props.user} ></LinechartCpu> */}
               </div>
               <div className="col-xl-4 col-lg-5">
-                <Piechart title="Disk"></Piechart>
+                <Piechart user = {this.props.user} title="Disk"></Piechart>
               </div>
             </div>
             <div className="row">
               <div class="col-lg-6 mb-4">
-                <Process></Process>
+                <Process user = {this.props.user}></Process>
               </div>
               <div class="col-lg-6 mb-4">
-                <Port></Port>
+                <Port user = {this.props.user}></Port>
               </div>
             </div>
   

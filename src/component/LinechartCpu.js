@@ -30,7 +30,7 @@ export default class LinechartCpu extends Component {
                                         borderColor: 'rgb(255, 99, 132, 0.5)',
                                         cubicInterpolationMode: 'monotone',
                                         fill: true,
-                                        data: []
+                                        
                                     }
                                 ]
                             }}
@@ -68,7 +68,7 @@ export default class LinechartCpu extends Component {
                                                 refresh: 10000,
                                                 delay: 2000,
                                                 onRefresh: function (chart) {
-                                                    let ref = store.collection('users/doanthao150399999/001').doc('cpu');
+                                                    let ref = store.collection(`users/${this.props.user}/001`).doc('cpu');
                                                     ref.get().then((snapshot) => {
                                                         const datasets = chart.config.data.datasets
                                                         datasets[0].data.push({

@@ -8,7 +8,7 @@ class Port extends Component {
         };
     };
     getPort = () => {
-        let ref = db.ref('monitor/users/001/domain/001/port');
+        let ref = db.ref(`monitor/users/${this.props.user}/domain/001/port`);
         ref.on('value', snapshot => {
             const state = snapshot.val();
             this.setState(state);

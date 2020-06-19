@@ -14,7 +14,7 @@ class Process extends Component {
     }
   }
   getData = () => {
-    let ref = db.ref('monitor/users/001/domain/001/topProcess');
+    let ref = db.ref(`monitor/users/${this.props.user}/domain/001/procRunning`);
     ref.on('value', snapshot => {
       this.setState({
         process: snapshot.val(),
@@ -25,7 +25,7 @@ class Process extends Component {
   killProcess = (e) => {
     if (!window.confirm(`Do you really want to kill process ${e.target.value}?` ))
       return;
-    let ref = db.ref('monitor/users/001/domain/001/task');
+    let ref = db.ref(`monitor/users/${this.props.user}/domain/001/task`);
     ref.set({
       cmd: 'kill -9 ' + e.target.value
     });

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { app } from '../firebase';
-import GoogleLogin from 'react-google-login';
 export default class Login extends Component {
   constructor(props) {
     super(props);
@@ -27,9 +26,6 @@ export default class Login extends Component {
       console.log(error);
     });
   }
-  responseGoogle = (response) => {
-    console.log(response);
-  }
   render() {
     return (
       <div className="container">
@@ -53,17 +49,7 @@ export default class Login extends Component {
                       <input type="password" className="form-control form-control-user" value={this.state.password} placeholder="Password" onChange={this.handleChangePassword} />
                     </div>
                     <button type="submit" className="btn btn-primary btn-user btn-block" onClick={this.handleLogin}>Login</button>
-                    {/* <button type="submit" className="btn btn-danger btn-user btn-block" onClick={this.handleLoginWithGoogle}>Login with Google </button> */}
-                    <GoogleLogin
-                      clientId="565251832636-nblpn7hqppckrjrtfa3fmt406getkunb.apps.googleusercontent.com"
-                      render={renderProps => (
-                        <button type="submit" className="btn btn-danger btn-user btn-block" onClick={renderProps.onClick} disabled={renderProps.disabled}>Login with Google</button>
-                      )}
-                      buttonText="Login"
-                      onSuccess={this.responseGoogle}
-                      onFailure={this.responseGoogle}
-                      cookiePolicy={'single_host_origin'}
-                    />
+                    <button type="submit" className="btn btn-danger btn-user btn-block" onClick={this.handleLogin}>Login with Google </button>
                   </form>
                   <hr />
                   <div className="text-center">
