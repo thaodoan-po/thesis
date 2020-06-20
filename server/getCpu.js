@@ -20,6 +20,7 @@ module.exports = function getCpu(ref) {
                 ref.doc('warning').add({
                     timeStart: time[0]
                 })
+                sendEmail();
             }
         }
         //set data to firestore
