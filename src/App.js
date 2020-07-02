@@ -14,22 +14,29 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.authListener();
+    const savedUser = localStorage.getItem('user') || undefined;
+    const savedEmail = localStorage.getItem('email') || undefined;
+    const emailId = savedEmail ? savedEmail.split('@')[0] : undefined;
+    if (savedUser && savedEmail) {
+      this.setState({user: savedUser, email: emailId});
+    } else {
+      this.authListener();
+    }
   }
 
   authListener() {
     app.auth().onAuthStateChanged((user) => {
-      console.log(user);
       let tmp = user.email
+      const name = user.email.split('@')[0]
       let reg = /(\w+)@\w+.\w+/gim;
-      var temp = reg.exec(tmp);
+      // var temp = reg.exec(tmp);
       this.setState({
-        email: temp[1]
+        email: name
       })
-      console.log(temp[1]);
       if (user) {
         this.setState({ user });
         localStorage.setItem('user', user.uid);
+        localStorage.setItem('email', user.email);
       } else {
         this.setState({ user: null });
         localStorage.removeItem('user');
