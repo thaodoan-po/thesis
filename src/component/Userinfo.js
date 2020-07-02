@@ -4,6 +4,9 @@ import {app} from '../firebase';
 export default class Userinfo extends Component {
     logout = () => {
         app.auth().signOut();
+        localStorage.removeItem('user');
+        localStorage.removeItem('email');
+        window.location.reload()
     }
     render() {
         return (

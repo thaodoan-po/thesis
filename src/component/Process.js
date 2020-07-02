@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { db } from '../firebase';
 import { Pagination } from './Pagination';
+
+
 class Process extends Component {
+
   constructor(props) {
     super(props);
     this.options = {
@@ -11,8 +14,52 @@ class Process extends Component {
     this.state = {
       process: {},
       page: 0,
+      idMemAsc: true,
+      isCpuAsc: false,
     }
   }
+
+  sortMem = (process) => {
+    const processArray = Object.keys(process).map(key => {
+      return process[key];
+    });
+
+    const { isMemAsc } = this.state;
+    this.setState({
+      isMemAsc: !isMemAsc,
+    })
+    let sorted = [];
+    if (isMemAsc) {
+      sorted = processArray.sort((a, b) => b.mem - a.mem);
+      this.setState({ process: { ...sorted } });
+      return;
+    }
+    sorted = processArray.sort((a, b) => a.mem - b.mem);
+    this.setState({ process: { ...sorted } });
+  }
+
+  sortCPU = (process) => {
+    const processArray = Object.keys(process).map(e => {
+      return process[e]
+    })
+    const { isCpuAsc } = this.state;
+    this.setState({
+      isCpuAsc: !isCpuAsc
+    })
+    let sortedArray = [];
+    if (isCpuAsc) {
+      sortedArray = processArray.sort((a, b) => b.cpu - a.cpu);
+      this.setState({
+        process: { ...sortedArray }
+      })
+      return
+    }
+    sortedArray = processArray.sort((a, b) => a.cpu - b.cpu);
+    this.setState({
+      process: { ...sortedArray }
+    })
+  }
+
   getData = () => {
     let ref = db.ref(`monitor/users/${this.props.user}/domain/001/procRunning`);
     ref.on('value', snapshot => {
@@ -22,8 +69,9 @@ class Process extends Component {
       console.log(snapshot.val());
     });
   }
+
   killProcess = (e) => {
-    if (!window.confirm(`Do you really want to kill process ${e.target.value}?` ))
+    if (!window.confirm(`Do you really want to kill process ${e.target.value}?`))
       return;
     let ref = db.ref(`monitor/users/${this.props.user}/domain/001/task`);
     ref.set({
@@ -34,6 +82,7 @@ class Process extends Component {
     this.getData();
   }
   render() {
+    const { process } = this.state;
     let len = Object.keys(this.state.process).length
     return (
       <div className="card shadow mb-4">
@@ -48,8 +97,24 @@ class Process extends Component {
                   <th scope="col">#</th>
                   <th scope="col">PID</th>
                   <th scope="col">Command</th>
-                  <th scope="col">%Mem</th>
-                  <th scope="col">%CPU</th>
+                  <th scope="col">%Mem
+                    <button type="button" className="btn btn-outline-light btn-sm"
+                      onClick={() => {
+                        this.sortMem(process)
+                      }}
+                    >
+                      <i className="fas text-gray-300 fa-sort" />
+                    </button>
+                  </th>
+                  <th scope="col">%CPU
+                    <button type="button" className="btn btn-outline-light btn-sm"
+                      onClick={() => {
+                        this.sortCPU(process)
+                      }}
+                    >
+                      <i className="fas text-gray-300 fa-sort" />
+                    </button>
+                  </th>
                   <th scope="col"></th>
                 </tr>
               </thead>
@@ -60,7 +125,7 @@ class Process extends Component {
                 }
               </tbody>
             </table>
-              <Pagination currentPage={this.state.page+1} totalPage={Math.ceil(len/5)} onChangePage={this.handlePageChange} />
+            <Pagination currentPage={this.state.page + 1} totalPage={Math.ceil(len / 5)} onChangePage={this.handlePageChange} />
           </div>
         </div>
       </div>
@@ -80,7 +145,7 @@ class Process extends Component {
           <td>{this.state.process[tmp[index]].cmd}</td>
           <td>{this.state.process[tmp[index]].mem}</td>
           <td>{this.state.process[tmp[index]].cpu}</td>
-          <td><button value={tmp[index]} type="button" class="btn btn-danger" type="submit" onClick={this.killProcess}>Kill</button></td>
+          <td><button value={tmp[index]} type="button" class="btn btn-danger" onClick={this.killProcess}>Kill</button></td>
         </tr>
       ));
       index++;
@@ -89,7 +154,7 @@ class Process extends Component {
   }
   handlePageChange = (e) => {
     this.setState({
-      page: e -1,
+      page: e - 1,
     })
   }
 }

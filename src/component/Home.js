@@ -5,6 +5,7 @@ import Pageheading from './Pageheading';
 import Card from './Card';
 import Piechart from './Piechart';
 import Process from './Process';
+import process_ from './process_';
 import {db} from '../firebase';
 import Port from './Port';
 import LinechartCpu from './LinechartCpu';
@@ -80,7 +81,7 @@ class Home extends Component {
               <Card title="CPU Utilization" color="primary" num={this.state.cpu} icon="microchip" />
               <Card title="Load Averages" color="success" num={this.state.loadAvg} icon="clock" />
               <Card title="Used Memory" color="info" num={this.state.memUsed} icon="server" />
-              <Card title="Running Process" color="warning" num={this.state.total} icon="list" />
+              <Card title="Running Process" color="warning" num={this.state.total} icon="layer-group" />
   
             </div>
   
@@ -99,6 +100,7 @@ class Home extends Component {
             <div className="row">
               <div class="col-lg-6 mb-4">
                 <Process user = {this.props.user}></Process>
+                {/* <process_></process_> */}
               </div>
               <div class="col-lg-6 mb-4">
                 <Port user = {this.props.user}></Port>
