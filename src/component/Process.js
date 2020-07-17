@@ -1,14 +1,43 @@
 import React, { Component } from 'react';
 import { db } from '../firebase';
 import { Pagination } from './Pagination';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+const ui = {
+  textAlign: 'center',
+  width: '500px',
+  padding: '40px',
+  background: '#28bae6',
+  boxShadow: '0 20px 75px rgba(0, 0, 0, 0.23)',
+  color: '#fff'
+}
+const h1 = {
+  display: 'block',
+  fontSize: '2em',
+  marginBlockStart: '0.67em',
+  marginBlockEnd: '0.67em',
+  marginInlineStart: '0px',
+  marginInlineEnd: '0px',
+  fontWeight: 'bold'
+}
 
+const button = {
+  width: '160px',
+  padding: '10px',
+  border: '1px solid #fff',
+  margin: '10px',
+  cursor:'pointer',
+  background: 'none',
+  color: '#fff',
+  fontSize: '14px'
+}
 
 class Process extends Component {
 
   constructor(props) {
     super(props);
     this.options = {
-      sizePage: 5,
+      sizePage: 10,
       sizePagination: 3
     }
     this.state = {
@@ -18,7 +47,35 @@ class Process extends Component {
       isCpuAsc: false,
     }
   }
-
+  killProcess = (e) => {
+    if (!window.confirm(`Do you really want to kill this process?`))
+      return;
+    let ref = db.ref(`monitor/users/${this.props.user}/domain/001/task`);
+    ref.set({
+      cmd: `kill -9 ${e.target.value}`
+    });
+  }
+  submit = (e) => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div style={ui}>
+            <h1 style={h1}>Are you sure?</h1>
+        <p>You want to kill {e.target.value}?</p>
+            <button style={button}
+              onClick={() => {
+                this.killProcess(e);
+                onClose();
+              }}
+            >
+              Yes, kill it!
+            </button>
+            <button style={button} onClick={onClose}>No</button>
+          </div>
+        );
+      }
+    });
+  };
   sortMem = (process) => {
     const processArray = Object.keys(process).map(key => {
       return process[key];
@@ -69,15 +126,6 @@ class Process extends Component {
       console.log(snapshot.val());
     });
   }
-
-  killProcess = (e) => {
-    if (!window.confirm(`Do you really want to kill process ${e.target.value}?`))
-      return;
-    let ref = db.ref(`monitor/users/${this.props.user}/domain/001/task`);
-    ref.set({
-      cmd: 'kill -9 ' + e.target.value
-    });
-  }
   componentDidMount() {
     this.getData();
   }
@@ -96,7 +144,8 @@ class Process extends Component {
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">PID</th>
-                  <th scope="col">Command</th>
+                  <th scope="col">Process</th>
+                  <th scope="col">Path</th>
                   <th scope="col">%Mem
                     <button type="button" className="btn btn-outline-light btn-sm"
                       onClick={() => {
@@ -125,7 +174,7 @@ class Process extends Component {
                 }
               </tbody>
             </table>
-            <Pagination currentPage={this.state.page + 1} totalPage={Math.ceil(len / 5)} onChangePage={this.handlePageChange} />
+            <Pagination currentPage={this.state.page + 1} totalPage={Math.ceil(len / 10)} onChangePage={this.handlePageChange} />
           </div>
         </div>
       </div>
@@ -143,6 +192,7 @@ class Process extends Component {
           <td>{index + 1}</td>
           <td>{tmp[index]}</td>
           <td>{this.state.process[tmp[index]].cmd}</td>
+          <td>{this.state.process[tmp[index]].dir}</td>
           <td>{this.state.process[tmp[index]].mem}</td>
           <td>{this.state.process[tmp[index]].cpu}</td>
           <td><button value={tmp[index]} type="button" class="btn btn-danger" onClick={this.killProcess}>Kill</button></td>

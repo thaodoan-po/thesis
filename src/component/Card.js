@@ -7,7 +7,7 @@ export default class Card extends Component {
 
     render() {
         return (
-            <div className="col-xl-3 col-md-6 mb-4">
+            <div className="mb-4">
                 <div className={"card shadow h-100 py-2 border-left-" + this.props.color}>
                     <div className="card-body">
                         <div className="row no-gutters align-items-center">                                
